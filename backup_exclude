@@ -1,0 +1,14 @@
+/dev/*
+/proc/*
+/sys/*
+/tmp/*
+/run/*
+/mnt/*
+/media/*
+/var/run/*
+/var/cache/*
+/var/lib/mysql/*
+/var/lib/elasticsearch/*
+/var/lib/lxcfs/*
+/var/log/journal
+/lost+found

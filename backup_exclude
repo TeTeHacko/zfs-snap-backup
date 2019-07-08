@@ -1,3 +1,4 @@
+/lost+found
 /dev/*
 /proc/*
 /sys/*
@@ -9,6 +10,9 @@
 /var/cache/*
 /var/lib/mysql/*
 /var/lib/elasticsearch/*
+/var/lib/influxdb/*
 /var/lib/lxcfs/*
-/var/log/journal
-/lost+found
+/var/lib/nginx/*
+/var/log/*
+/opt/chroot/*
+/usr/src/*

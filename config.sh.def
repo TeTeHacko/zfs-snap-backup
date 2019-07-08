@@ -1,0 +1,30 @@
+#!/bin/bash
+# Copyright (C) 2018 by Tomas Herceg <tth@rfa.cz>
+# Released under GNU GPL 3 or later
+
+# space delimited list of hostnames to backup
+HOSTS=(localhost)
+# name of the zpool
+POOL=zpool
+# dir where is zpool mounted
+MOUNT_DIR=/mnt/$POOL
+# we need this hack to properly handle spaces and symlinks.
+SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+# global exlude file
+EXCLUDE_PATH=$SCRIPTPATH/backup_exclude
+# dir for excluding files per hostname - filename is hostname of the backuped server
+EXCLUDE_DIR=$SCRIPTPATH/backup_exclude.d
+# lock dir to avoid running backups from same machine multiple times
+LOCK_DIR=/run/lock/backup
+# how many times try to run rsync before backup fails
+MAX_RETRIES=3
+# this will keep only one backup per day (the latest)
+KEEP_DAYS=14
+# this will keep all backups (if you backuping more then once a day)
+KEEP_ALL_DAYS=7
+# limit rsync bandwidth per sec
+BW_LIMIT=25MB
+
+# debug settings
+DEBUG=1
+DEBUG_RSYNC=1

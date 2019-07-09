@@ -29,7 +29,7 @@ fi
 # overwrite hosts from config if commandline parameter is used
 if [ "$#" -ne 0 ]; then
   if [ "$@" == "-all" ] || [ "$@" == "--all" ]; then
-    HOSTS=`zfs list |awk -F'[ /]+' -v pool="$POOL/" '$0 ~ pool {print $2}' | tr '\n' ' '`
+    HOSTS=`zfs list |awk -F'[ /]+' -v pool="$POOL/" -v ORS=" " '$0 ~ pool {print $2}'`
     debug "Overwriting HOSTS by all actual backuped servers" "$HOSTS"
   else
     HOSTS=("$@")

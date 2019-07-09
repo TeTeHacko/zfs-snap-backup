@@ -2,7 +2,9 @@
 # Copyright (C) 2018 by Tomas Herceg <tth@rfa.cz>
 # Released under GNU GPL 3 or later
 
-source shared.sh
+# we need this hack to properly handle spaces and symlinks.
+SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+source $SCRIPTPATH/shared.sh
 
 for host in ${HOSTS[@]}; do
 	lockfile -r 0 $LOCK_DIR/$host || continue

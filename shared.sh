@@ -19,8 +19,8 @@ error() {
 	echo -e "`date` ${Red}${1}:${Reset} $2${Reset}"
 }
 
-if [ -r config.sh ]; then
-  source config.sh
+if [ -r $SCRIPTPATH/config.sh ]; then
+  source $SCRIPTPATH/config.sh
 else
   error "config.sh not found" "you can copy default config.sh.def"
   exit 1

@@ -9,6 +9,7 @@
 /var/run/*
 /var/cache/*
 /var/lib/mysql/*
+/var/lib/postgresql/*
 /var/lib/elasticsearch/*
 /var/lib/influxdb/*
 /var/lib/lxcfs/*

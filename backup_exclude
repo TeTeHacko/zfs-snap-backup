@@ -13,6 +13,7 @@
 /var/lib/elasticsearch/*
 /var/lib/influxdb/*
 /var/lib/lxcfs/*
+/var/lib/docker/*
 /var/lib/nginx/*
 /var/log/*
 /opt/chroot/*

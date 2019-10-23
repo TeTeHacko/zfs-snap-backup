@@ -8,6 +8,7 @@ source $SCRIPTPATH/shared.sh
 
 for host in ${HOSTS[@]}; do
 	lockfile -r 0 $LOCK_DIR/$host || continue
+	grep -q $host /etc/nagios/nrpe.d/backups.cfg || echo "command[check_backup!$host]=/usr/lib/nagios/plugins/check_backup.sh $host" >> /etc/nagios/nrpe.d/backups.cfg
 	options=""
 	debug "backuping host" "${White}${host}"
 	/sbin/zfs create -p $POOL/$host 2> >(while read line; do echo -e "${Red}${line}${Reset}" >&2; done)
@@ -41,3 +42,4 @@ for host in ${HOSTS[@]}; do
 	eval $rem_more_old 2> >(while read line; do echo -e "${Red}${line}${Reset}" >&2; done)
 	rm -f $LOCK_DIR/$host 2> >(while read line; do echo -e "${Red}${line}${Reset}" >&2; done)
 done
+systemctl nagios-nrpe-server reload

@@ -42,4 +42,4 @@ for host in ${HOSTS[@]}; do
 	eval $rem_more_old 2> >(while read line; do echo -e "${Red}${line}${Reset}" >&2; done)
 	rm -f $LOCK_DIR/$host 2> >(while read line; do echo -e "${Red}${line}${Reset}" >&2; done)
 done
-systemctl nagios-nrpe-server reload
+systemctl restart nagios-nrpe-server

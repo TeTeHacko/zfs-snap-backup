@@ -9,7 +9,7 @@ source $SCRIPTPATH/shared.sh
 for host in ${HOSTS[@]}; do
 	debug "checking host" "${White}${host}"
 
-  ret=$(ssh -o ConnectTimeout=5 ${host} true 2>&1)
+  ret=$(ssh -o ConnectTimeout=5 -o PasswordAuthentication=no ${host} true 2>&1)
   rc=$?
   if [ $rc -gt 0 ]; then
     debug "${Red}${ret}"

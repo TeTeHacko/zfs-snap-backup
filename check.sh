@@ -48,7 +48,7 @@ elif [ ${#crit[@]} -gt 0 ]; then
     echo -n "${host}, "
   done
 else
-  echo -n "ALL BACKUPS OK"
+  echo -n "ALL ${#HOSTS[@]} BACKUPS OK"
 fi
 
 echo

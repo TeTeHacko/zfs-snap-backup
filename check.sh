@@ -41,13 +41,14 @@ if [ ${#warn[@]} -gt 0 ]; then
   for host in "${!warn[@]}"; do
     echo -n "${host}, "
   done
-fi
-if [ ${#crit[@]} -gt 0 ]; then
+elif [ ${#crit[@]} -gt 0 ]; then
   echo -n "CRITICAL: "
   rc=2
   for host in "${!crit[@]}"; do
     echo -n "${host}, "
   done
+else
+  echo -n "ALL BACKUPS OK"
 fi
 
 echo

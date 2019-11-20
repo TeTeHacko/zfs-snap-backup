@@ -7,6 +7,7 @@ if tty -s; then
   White='\e[01;37m'
   Red='\e[01;31m'
   Green='\e[01;32m'
+  Orange='\e[01;33m'
   Reset='\e[00m'
   DEBUG_RSYNC=1
 fi

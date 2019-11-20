@@ -17,14 +17,17 @@ EXCLUDE_DIR=$SCRIPTPATH/backup_exclude.d
 # lock dir to avoid running backups from same machine multiple times
 LOCK_DIR=/run/lock/backup
 # how many times try to run rsync before backup fails
-MAX_RETRIES=3
+: ${MAX_RETRIES:=3}
+
 # this will keep only one backup per day (the latest)
-KEEP_DAYS=14
+: ${KEEP_DAYS:=60}
+
 # this will keep all backups (if you backuping more then once a day)
-KEEP_ALL_DAYS=7
+: ${KEEP_ALL_DAYS:=1}
+
 # limit rsync bandwidth per sec
-BW_LIMIT=25MB
+: ${BW_LIMIT:=35M}
 
 # debug settings
-DEBUG=1
-DEBUG_RSYNC=1
+: ${DEBUG:=1}
+: ${DEBUG_RSYNC:=1}

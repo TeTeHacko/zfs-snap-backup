@@ -9,11 +9,12 @@ source $SCRIPTPATH/shared.sh
 prob=0
 declare -A crit
 declare -A warn
+declare -A tot_used
 
 for host in ${HOSTS[@]}; do
 	debug "checking host" "${White}${host}"
 
-  ret=$(ssh -o ConnectTimeout=5 -o PasswordAuthentication=no ${host} true 2>&1)
+  ret=$(ssh -q -o ConnectTimeout=10 -o PasswordAuthentication=no ${host} true 2>&1)
   rc=$?
   prob=$((prob + rc))
   if [ $rc -gt 0 ]; then
@@ -21,9 +22,9 @@ for host in ${HOSTS[@]}; do
     crit["${host}"]="${ret}"
   fi
 
-  ret=$(./check_backup.sh "${host}" 2>&1)
-  rc=$?
+  source $SCRIPTPATH/check_backup.sh $host
   prob=$((prob + rc))
+  tot_used["${host}"]="$used"
   if [ $rc -gt 1 ]; then
     debug "${Red}crit" "${ret}"
     crit["${host}"]=""
@@ -50,6 +51,13 @@ elif [ ${#crit[@]} -gt 0 ]; then
 else
   echo -n "ALL ${#HOSTS[@]} BACKUPS OK"
 fi
+
+echo -n " | "
+
+for i in "${!tot_used[@]}"
+do
+  echo -n "${i}=${tot_used[$i]}B; "
+done
 
 echo
 exit $rc

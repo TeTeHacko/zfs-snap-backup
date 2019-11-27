@@ -10,6 +10,7 @@ prob=0
 declare -A crit
 declare -A warn
 declare -A tot_used
+declare -A last
 
 for host in ${HOSTS[@]}; do
 	debug "checking host" "${White}${host}"
@@ -25,6 +26,7 @@ for host in ${HOSTS[@]}; do
   source $SCRIPTPATH/check_backup.sh $host
   prob=$((prob + rc))
   tot_used["${host}"]="$used"
+  last["${host}"]="$last_snap"
   if [ $rc -gt 1 ]; then
     debug "${Red}crit" "${ret}"
     crit["${host}"]=""
@@ -40,13 +42,13 @@ if [ ${#warn[@]} -gt 0 ]; then
   echo -n "WARNING: "
   rc=1
   for host in "${!warn[@]}"; do
-    echo -n "${host}, "
+    echo -n "${host} (${last[${host}]}) "
   done
 elif [ ${#crit[@]} -gt 0 ]; then
   echo -n "CRITICAL: "
   rc=2
   for host in "${!crit[@]}"; do
-    echo -n "${host}, "
+    echo -n "${host} (${last[${host}]}) "
   done
 else
   echo -n "ALL ${#HOSTS[@]} BACKUPS OK"
@@ -56,7 +58,7 @@ echo -n " | "
 
 for i in "${!tot_used[@]}"
 do
-  echo -n "${i}=${tot_used[$i]}B; "
+  echo -n "${i}=${tot_used[$i]}B; ${i}_last=${last[${i}]} "
 done
 
 echo

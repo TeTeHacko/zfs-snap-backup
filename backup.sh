@@ -6,12 +6,22 @@
 SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 source $SCRIPTPATH/shared.sh
 
+if ! mountpoint -q $MOUNT_DIR; then
+  debug "$POOL is not mounted"
+  exit 1
+fi
+
 for host in ${HOSTS[@]}; do
 	lockfile -r 0 $LOCK_DIR/$host || continue
 	grep -q $host /etc/nagios/nrpe.d/backups.cfg || echo "command[check_backup!$host]=/usr/lib/nagios/plugins/check_backup.sh $host" >> /etc/nagios/nrpe.d/backups.cfg
 	options=""
 	debug "backuping host" "${White}${host}"
 	/sbin/zfs create -p $POOL/$host 2> >(while read line; do echo -e "${Red}${line}${Reset}" >&2; done)
+  if ! mountpoint -q $MOUNT_DIR/$ost; then
+    debug "$POOL/$host is not mounted"
+    return
+  fi
+
 	[ -r ${EXCLUDE_DIR}/${host} ] && options="$options --exclude-from ${EXCLUDE_DIR}/${host}"
 	[ $DEBUG_RSYNC == 1 ] && options="$options -vP --human-readable"
 	i=0

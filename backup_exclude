@@ -15,6 +15,11 @@
 /var/lib/lxcfs/*
 /var/lib/docker/*
 /var/lib/nginx/*
+/var/lib/apt/lists/*
+/var/lib/php/sessions/*
 /var/log/*
 /opt/chroot/*
 /usr/src/*
+/home/forge/*/storage/framework/sessions/*
+/home/forge/*/storage/framework/cache/*
+/home/forge/*/storage/debugbar/*

@@ -1,4 +1,5 @@
 /lost+found
+/swap.img
 /dev/*
 /proc/*
 /sys/*

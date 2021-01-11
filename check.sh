@@ -6,7 +6,6 @@
 SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 source $SCRIPTPATH/shared.sh
 
-prob=0
 declare -A crit
 declare -A warn
 declare -A tot_used
@@ -15,16 +14,14 @@ declare -A last
 for host in ${HOSTS[@]}; do
 	debug "checking host" "${White}${host}"
 
-  ret=$(ssh -q -o ConnectTimeout=10 -o PasswordAuthentication=no ${host} true 2>&1)
+  ret=$(ssh -o ConnectTimeout=13 -o PasswordAuthentication=no ${host} true 2>&1)
   rc=$?
-  prob=$((prob + rc))
   if [ $rc -gt 0 ]; then
-    debug "${Red}crit" "${ret}"
-    crit["${host}"]="${ret}"
+    debug "${Orange}warn" "${ret}"
+    warn["${host}"]="${ret}"
   fi
 
   source $SCRIPTPATH/check_backup.sh $host
-  prob=$((prob + rc))
   tot_used["${host}"]="$used"
   last["${host}"]="$last_snap"
   if [ $rc -gt 1 ]; then
@@ -44,14 +41,17 @@ if [ ${#warn[@]} -gt 0 ]; then
   for host in "${!warn[@]}"; do
     echo -n "${host} (${last[${host}]}) "
   done
-elif [ ${#crit[@]} -gt 0 ]; then
+fi
+if [ ${#crit[@]} -gt 0 ]; then
   echo -n "CRITICAL: "
   rc=2
   for host in "${!crit[@]}"; do
     echo -n "${host} (${last[${host}]}) "
   done
-else
+fi
+if [ ${#crit[@]} -eq 0 -a ${#warn[@]} -eq 0 ]; then
   echo -n "ALL ${#HOSTS[@]} BACKUPS OK"
+  rc=0
 fi
 
 echo -n " | "

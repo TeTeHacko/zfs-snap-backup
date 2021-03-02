@@ -9,6 +9,7 @@
 /mnt/*
 /media/*
 /var/run/*
+/var/tmp/*
 /var/cache/*
 /var/lib/mysql/*
 /var/lib/postgresql/*

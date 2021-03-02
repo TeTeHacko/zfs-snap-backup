@@ -23,13 +23,13 @@ for host in ${HOSTS[@]}; do
   fi
 
 	[ -r ${EXCLUDE_DIR}/${host} ] && options="$options --exclude-from ${EXCLUDE_DIR}/${host}"
-	[ $DEBUG_RSYNC == 1 ] && options="$options -vP --human-readable"
+	[ $DEBUG_RSYNC == 1 ] && options="$options -vvP --human-readable"
 	i=0
 	status=255
 	while [ $status -ne 0 -a $i -lt $MAX_RETRIES ]; do
 		i=$(($i+1))
 		debug "rsync loop try" "$i"
-		rsync_command="rsync -aAX $options --bwlimit $BW_LIMIT --numeric-ids --exclude-from $EXCLUDE_PATH --delete --hard-links --inplace --delete-excluded $host:/ $MOUNT_DIR/$host"
+		rsync_command="rsync -aAX $options --bwlimit $BW_LIMIT --numeric-ids --exclude-from $EXCLUDE_PATH --delete --delete-after --ignore-errors --hard-links --inplace --delete-excluded $host:/ $MOUNT_DIR/$host"
 		debug "rsync command" "$rsync_command"
 		$rsync_command 2> >(while read line; do echo -e "${Red}${line}${Reset}" >&2; done)
 		status=$?

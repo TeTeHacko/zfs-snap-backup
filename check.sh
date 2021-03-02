@@ -39,7 +39,7 @@ if [ ${#warn[@]} -gt 0 ]; then
   echo -n "WARNING: "
   rc=1
   for host in "${!warn[@]}"; do
-    echo -n "${host} (${last[${host}]}) "
+    [ "${!crit[$host]}" == "" ] && echo -n "${host} (${last[${host}]}) "
   done
 fi
 if [ ${#crit[@]} -gt 0 ]; then

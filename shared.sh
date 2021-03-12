@@ -13,11 +13,11 @@ if tty -s; then
 fi
 
 debug() {
-	[ $DEBUG == 1 ] && echo -e "`date` ${Blue}${1}:${Reset} $2${Reset}"
+  [ $DEBUG == 1 ] && echo -e "`date` ${Blue}${1}:${Reset} $2${Reset}"
 }
 
 error() {
-	echo -e "`date` ${Red}${1}:${Reset} $2${Reset}"
+  echo -e "`date` ${Red}${1}:${Reset} $2${Reset}"
 }
 
 if [ -r $SCRIPTPATH/config.sh ]; then
@@ -44,3 +44,5 @@ if [ "$HOSTS" == "" ]; then
 fi
 
 mkdir -p $LOCK_DIR
+
+# vim: noexpandtab tabstop=2 shiftwidth=2 nowrap

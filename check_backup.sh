@@ -27,13 +27,15 @@ if [[ $lock_file -eq 1 ]]; then
   lock_age_m=$(expr $lock_age_t / 60)
   lock_age_s=$(expr $lock_age_t % 60)
   ret="lock file exists! lock_age: ${lock_age_h}h ${lock_age_m}m ${lock_age_s}s"
-	[[ $running_rsyncs -gt 0 ]] && rc=1 || rc=2
+  [[ $running_rsyncs -gt 0 ]] && rc=1 || rc=2
 elif find ${MOUNT_DIR}/${host}/ -maxdepth 1 -type f -name .last_backup -mmin -${time} -printf "%p is newer than ${time} mins, last chage: %c" 2>/dev/null |grep -q 'newer'; then
-	rc=0
+  rc=0
 else
-	ret="newer backup than ${time} mins not found!"
+  ret="newer backup than ${time} mins not found!"
   rc=2
 fi
 ret="$ret last snap: ${last_snap}, lock file: ${lock_file}, running rsyncs: ${running_rsyncs}, used: ${used_h} | lock_file=${lock_file}; running_rsyncs=${running_rsyncs}; used=${used}B; "
 
 [ $(basename "$0") == "check_backup.sh" ] && (echo $ret; exit $rc) || return $rc
+
+# vim: noexpandtab tabstop=2 shiftwidth=2 nowrap

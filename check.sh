@@ -12,7 +12,7 @@ declare -A tot_used
 declare -A last
 
 for host in ${HOSTS[@]}; do
-	debug "checking host" "${White}${host}"
+  debug "checking host" "${White}${host}"
 
   ret=$(ssh -o ConnectTimeout=13 -o PasswordAuthentication=no ${host} true 2>&1)
   rc=$?
@@ -64,3 +64,5 @@ done
 
 echo
 exit $rc
+
+# vim: noexpandtab tabstop=2 shiftwidth=2 nowrap

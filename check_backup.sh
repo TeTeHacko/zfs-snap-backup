@@ -13,6 +13,8 @@ time=${2:-1440}
 
 last_snap=$(ls ${MOUNT_DIR}/${host}/.snapshots/ 2>/dev/null |tail -n 1)
 running_rsyncs=$(ps aux|grep [r]sync | fgrep $host|wc -l)
+used=$(btrfs qgroup show --raw -f ${MOUNT_DIR}/${host}|gawk '/^0/ {print $2}')
+used_h=$(btrfs qgroup show -f ${MOUNT_DIR}/${host}|gawk '/^0/ {print $2}')
 test -f ${LOCK_DIR}/${host} && lock_file=1 || lock_file=0
 
 rc=3
@@ -32,7 +34,7 @@ else
 	ret="newer backup than ${time} mins not found!"
 	rc=2
 fi
-ret="$ret last snap: ${last_snap}, lock file: ${lock_file}, running rsyncs: ${running_rsyncs} | lock_file=${lock_file}; running_rsyncs=${running_rsyncs}; "
+ret="$ret last snap: ${last_snap}, lock file: ${lock_file}, running rsyncs: ${running_rsyncs}, used: ${used_h} | lock_file=${lock_file}; running_rsyncs=${running_rsyncs}; used=${used}B; "
 
 [ $(basename "$0") == "check_backup.sh" ] && (echo $ret; exit $rc) || return $rc
 

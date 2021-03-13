@@ -26,3 +26,4 @@
 /home/forge/*/storage/framework/sessions/*
 /home/forge/*/storage/framework/cache/*
 /home/forge/*/storage/debugbar/*
+.snapshots

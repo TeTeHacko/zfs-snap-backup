@@ -58,7 +58,7 @@ echo -n " | "
 
 for i in "${!tot_used[@]}"
 do
-  diff=$((($(date +%s)-$(date +%s --date "$(echo ${last[${i}]} | sed 's/-/ /3')"))/(60)))
+	diff=$((($(date +%s)-$(date +%s --date "$(echo ${last[${i}]} | sed 's/-/ /3')"))/(60)))
 	echo -n "${i//./_}-age=${diff}m; "
 done
 

@@ -16,11 +16,7 @@ for host in ${HOSTS[@]}; do
 	touch $LOCK_DIR/$host
 	options=""
 	debug "backuping host" "${White}${host}"
-	btrfs subvolume create $MOUNT_DIR/$host 2> >(while read line; do echo -e "${Red}${line}${Reset}" >&2; done)
-	if ! mountpoint -q $MOUNT_DIR/$host; then
-		debug "$MOUNT_DIR/$host is not mounted"
-		exit
-	fi
+	[ ! -d $MOUNT_DIR/$host ] && btrfs subvolume create $MOUNT_DIR/$host 2> >(while read line; do echo -e "${Red}${line}${Reset}" >&2; done)
 
 	[ -r ${EXCLUDE_DIR}/${host} ] && options="$options --exclude-from ${EXCLUDE_DIR}/${host}"
 	[ $DEBUG_RSYNC == 1 ] && options="$options -vP --human-readable"

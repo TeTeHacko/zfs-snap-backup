@@ -14,7 +14,7 @@ declare -A last
 for host in ${HOSTS[@]}; do
   debug "checking host" "${White}${host}"
 
-  ret=$(ssh -o ConnectTimeout=13 -o PasswordAuthentication=no ${host} true 2>&1)
+  ret=$(timeout 20 ssh -o ConnectTimeout=13 -o BatchMode=yes -o PasswordAuthentication=no ${host} true 2>&1)
   rc=$?
   if [ $rc -gt 0 ]; then
     debug "${Orange}warn" "${ret}"
@@ -39,7 +39,7 @@ if [ ${#warn[@]} -gt 0 ]; then
   echo -n "WARNING: "
   rc=1
   for host in "${!warn[@]}"; do
-    [ "${!crit[$host]}" == "" ] && echo -n "${host} (${last[${host}]}) "
+    [[ -v crit[$host] ]] || echo -n "${host} (${last[${host}]}) "
   done
 fi
 if [ ${#crit[@]} -gt 0 ]; then

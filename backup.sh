@@ -12,7 +12,7 @@ if ! mountpoint -q $MOUNT_DIR; then
 fi
 
 for host in ${HOSTS[@]}; do
-  lockfile -r 0 $LOCK_DIR/$host || continue
+  lockfile -r 0 $LOCK_DIR/$host || { error "lock exists" "${host}: skipping (another backup running?)"; continue; }
   options=""
   debug "backuping host" "${White}${host}"
   /sbin/zfs create -p $POOL/$host 2> >(while read line; do echo -e "${Red}${line}${Reset}" >&2; done)
@@ -41,7 +41,7 @@ for host in ${HOSTS[@]}; do
     $snap_command 2> >(while read line; do echo -e "${Red}${line}${Reset}" >&2; done)
     touch $MOUNT_DIR/$host/.last_backup 2> >(while read line; do echo -e "${Red}${line}${Reset}" >&2; done)
   else
-    debug "rsync failed, skipping create snapshot"
+    error "rsync failed" "${host}: skipping create snapshot"
   fi
   rem_old="/sbin/zfs list -t snapshot -o name -H |awk -v keep=$(date -d "now -$KEEP_DAYS days" +"%Y%m%d") -F '[ @]' '/$host/ {date=substr(\$2,1,4) substr(\$2,6,2) substr(\$2,9,2); count[date]++; snap[date][count[date]]=\$0} END { for (key in count) { if ( key <= keep) { for ( prt in snap[key] ) { print snap[key][prt] }}} }' | xargs -r -n 1 /sbin/zfs destroy"
   debug "deleting all older than $KEEP_DAYS days old" "$rem_old"

@@ -2,6 +2,13 @@
 # Copyright (C) 2018 by Tomas Herceg <tth@rfa.cz>
 # Released under GNU GPL 3 or later
 
+# Never use a forwarded ssh-agent. When run by hand from an interactive session,
+# the user agent is forwarded here and contains FIDO2/SK keys (YubiKey) that wait
+# for a physical touch - ssh then blocks indefinitely and hangs the whole run.
+# Under cron there is no agent at all, so this only makes manual runs behave the
+# same as cron ones. Server-local keys in /root/.ssh are used either way.
+unset SSH_AUTH_SOCK
+
 if tty -s; then
   Blue='\e[01;34m'
   White='\e[01;37m'

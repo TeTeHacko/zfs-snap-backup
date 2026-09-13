@@ -9,7 +9,7 @@ SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 source $SCRIPTPATH/config.sh
 
 host=${1:-localhost}
-time=${2:-1440}
+time=${2:-${BACKUP_MAX_AGE:-1440}}
 
 last_snap=$(ls ${MOUNT_DIR}/${host}/.zfs/snapshot/ |tail -n 1)
 running_rsyncs=$(ps aux|grep [r]sync | fgrep $host|wc -l)

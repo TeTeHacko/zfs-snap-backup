@@ -25,6 +25,11 @@ LOCK_DIR=/run/lock/backup
 # this will keep all backups (if you backuping more then once a day)
 : ${KEEP_ALL_DAYS:=1}
 
+# how old (minutes) a backup may get before check_backup.sh calls it
+# CRITICAL. Keep it comfortably above the interval between runs plus the
+# time a full pass takes, or the check flaps.
+: ${BACKUP_MAX_AGE:=1440}
+
 # limit rsync bandwidth per sec
 : ${BW_LIMIT:=35M}
 

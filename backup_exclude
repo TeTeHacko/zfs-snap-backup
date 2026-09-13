@@ -23,6 +23,12 @@
 /var/log/*
 /opt/chroot/*
 /usr/src/*
-/home/forge/*/storage/framework/sessions/*
-/home/forge/*/storage/framework/cache/*
-/home/forge/*/storage/debugbar/*
+/home/*/*/storage/framework/sessions/*
+/home/*/*/storage/framework/cache/*
+/home/*/*/storage/debugbar/*
+/home/*/.cache
+/var/spool/mqueue/*
+# Local system mailboxes only - root's cron and logwatch mail. Checked before
+# adding this, because on a mail server the line looks alarming: the real
+# mail store is a maildir under its own path and is untouched by it.
+/var/mail/*

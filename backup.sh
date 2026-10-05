@@ -17,8 +17,14 @@ for host in ${HOSTS[@]}; do
 	debug "backuping host" "${White}${host}"
 	/sbin/zfs create -p $POOL/$host 2> >(while read line; do echo -e "${Red}${line}${Reset}" >&2; done)
 	if ! mountpoint -q $MOUNT_DIR/$host; then
-		debug "$POOL/$host is not mounted"
-		return
+		# Not `return`: at top level of a script that only prints an error and
+		# the loop goes on into rsync, which then writes the host into the
+		# parent dataset - later hidden under the mountpoint. ~1.2 TB of such
+		# copies found on big.grg 2026-10-04: the pool root was mounted while
+		# the host's encrypted dataset was still waiting for its key.
+		error "$POOL/$host is not mounted" "${host}: skipping"
+		rm -f $LOCK_DIR/$host
+		continue
 	fi
 
 	[ -r ${EXCLUDE_DIR}/${host} ] && options="$options --exclude-from ${EXCLUDE_DIR}/${host}"
